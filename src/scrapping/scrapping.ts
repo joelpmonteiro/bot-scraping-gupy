@@ -1,14 +1,15 @@
-import puppeteer, { Browser, LaunchOptions } from 'puppeteer';
+import puppeteer, { Browser, LaunchOptions, Page } from 'puppeteer';
 
 export default class Scrapping {
     private url: string = 'https://senaigo.gupy.io/'
     private browser: Browser | null = null;
+    private page: Page | null = null;
     private chromiumOptions: LaunchOptions = {
         browser: 'chrome',
         // Make browser logs visible
         dumpio: true,
-        headless:false
-      };
+        headless: false
+    };
 
     constructor() {
     }
@@ -16,10 +17,10 @@ export default class Scrapping {
     async init_scrapping() {
         try {
             this.browser = await puppeteer.launch(this.chromiumOptions);
-            const page = await this.browser?.newPage();
-            await page?.goto(this.url);
-            await page?.setViewport({ width: 1080, height: 1024 });
-
+            this.page = await this.browser?.newPage();
+            await this.page.goto(this.url);
+            await this.page.setViewport({ width: 1280, height: 1024 });
+            console.log('teste')
         } catch (error) {
             console.log(error)
         }
@@ -31,5 +32,17 @@ export default class Scrapping {
 
     setBrowser(browser: any) {
         this.browser = browser
+    }
+
+    getPage(): Page | null {
+        return this.page;
+    }
+
+    setPage(page: any) {
+        this.page = page
+    }
+
+    getClosBrowser() {
+        return this.browser?.close();
     }
 }
